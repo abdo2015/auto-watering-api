@@ -1,6 +1,8 @@
 from flask import Blueprint
 from flask_restplus import Api
 
+from app.api.controller.auth import app as auth_ns
+
 blueprint = Blueprint('api', __name__)
 
 api = Api(blueprint,
@@ -9,3 +11,5 @@ api = Api(blueprint,
           description="handle all web app requests and arduino requests",
           doc='/api'
           )
+
+api.add_namespace(auth_ns)
