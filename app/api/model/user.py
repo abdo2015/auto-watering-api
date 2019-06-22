@@ -29,7 +29,7 @@ class User(db.Model, UserMixin):
     @staticmethod
     @login_manager.user_loader
     def load_user(user_id):
-        return User.quere.filter_by(id=user_id).first()
+        return User.query.filter_by(id=user_id).first()
 
     def __repr__(self):
         return f"ID: {self.id}, user name: {self.username}"

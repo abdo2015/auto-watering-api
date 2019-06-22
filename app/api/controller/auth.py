@@ -43,9 +43,9 @@ class Login(Resource):
             return response_opj, 500
 
 
-@login_required
 @app.route('/logout')
 class Logout(Resource):
+    @login_required
     def get(self):
         try:
             logout_user()
@@ -55,7 +55,7 @@ class Logout(Resource):
             }
             return response_opj, 200
         except Exception as e:
-            print("Exception at login:", str(e))
+            print("Exception at logout:", str(e))
             response_opj = {
                 'status': 'faild',
                 'message': 'Something Wrong, please try again later'
