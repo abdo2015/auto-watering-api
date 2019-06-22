@@ -2,7 +2,6 @@ from flask import request
 from flask_restplus import Namespace, Resource, fields
 from flask_login import login_user, logout_user, login_required
 
-# from app import db
 from ..model.user import User
 
 app = Namespace('auth', 'endpoints for login and logout users')
@@ -11,10 +10,10 @@ user_auth = app.model("auth", {
     'password': fields.String(required=True, description="user password")
 })
 
-
+# TODO validate request data
 @app.route('/login')
+@app.expect(user_auth)
 class Login(Resource):
-    @app.expect(user_auth)
     def post(self):
         try:
             data = request.json
@@ -42,7 +41,7 @@ class Login(Resource):
             }
             return response_opj, 500
 
-
+# TODO validate request data
 @app.route('/logout')
 class Logout(Resource):
     @login_required
@@ -61,3 +60,11 @@ class Logout(Resource):
                 'message': 'Something Wrong, please try again later'
             }
             return response_opj, 500
+
+
+# TODO delete test class
+@app.route('/test')
+class Test(Resource):
+    @login_required
+    def get(self):
+        return "worked"

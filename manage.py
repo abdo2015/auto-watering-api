@@ -20,6 +20,13 @@ app.register_blueprint(api_bl)
 def run(port=5000):
     app.run(port=port)
 
+# TODO delete test fun & command
+@manager.command
+def test():
+    from app.api.model.user import User
+    users = User.query.all()
+    print(users)
+
 
 if __name__ == "__main__":
 
