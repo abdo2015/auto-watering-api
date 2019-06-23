@@ -72,6 +72,9 @@ class Update(Resource):
                 }
                 return response_opj, 422
             land.land_area = data.get('land_area')
+            plant_id = data.get('plant_id') or None
+            if plant_id:
+                land.plant_id = plant_id
             db.session.add(land)
             db.session.commit()
             response_opj = {

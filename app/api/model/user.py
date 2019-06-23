@@ -16,6 +16,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(50))
     password_hash = db.Column(db.String(100))
     lands = db.relationship('Land', backref='user', lazy=False)
+
     @property
     def password(self):
         raise AttributeError('password: write-only field')

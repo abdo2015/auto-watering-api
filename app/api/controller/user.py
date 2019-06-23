@@ -1,9 +1,11 @@
 import datetime
-from flask import request
+from flask import request, jsonify
 from flask_restplus import Namespace, Resource, fields
 from flask_login import login_user, login_required, current_user
 
 from ..model.user import User
+from ..model.land import Land
+
 from ... import db
 
 app = Namespace('user', 'add and update users endpoints')
@@ -82,3 +84,22 @@ class UpdateUser(Resource):
                 'message': 'Something Wrong, please try again later'
             }
             return response_opj, 500
+
+
+@app.route('/lands')
+class UserLands(Resource):
+    @login_required
+    def get(self):
+        user_id = current_user.id
+        lands = Land.query.filter_by(owner_id=user_id).all()
+        if not lands:
+            response_opj = {
+                'status': 'success',
+                'message': "user don't have any lands right now"
+            }
+            return response_opj, 200
+        response_opj = {
+            'status': 'success',
+            "data": [land.serialize for land in lands]
+        }
+        return response_opj, 200
