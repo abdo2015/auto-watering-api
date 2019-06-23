@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 
 from ... import db, bcrypt, login_manager
+from .land import Land
 
 
 class User(db.Model, UserMixin):
@@ -14,7 +15,7 @@ class User(db.Model, UserMixin):
     # public_id = db.Column(db.String(100), unique=True)
     username = db.Column(db.String(50))
     password_hash = db.Column(db.String(100))
-
+    lands = db.relationship('Land', backref='user', lazy=False)
     @property
     def password(self):
         raise AttributeError('password: write-only field')
@@ -32,4 +33,4 @@ class User(db.Model, UserMixin):
         return User.query.filter_by(id=user_id).first()
 
     def __repr__(self):
-        return f"ID: {self.id}, user name: {self.username}"
+        return f"ID: {self.id}, user name: {self.username}, lands: {self.lands}"
