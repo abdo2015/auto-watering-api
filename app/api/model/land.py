@@ -63,6 +63,7 @@ class Plant(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50), nullable=False)
     _water_amount = db.Column(db.Float, nullable=False)
+    fertilizer = db.Column(db.String, nullable=False)
     lands = db.relationship('Land', backref='land', lazy=False)
 
     def __repr__(self):
@@ -75,6 +76,6 @@ class Plant(db.Model, UserMixin):
 
     @water_amount.setter
     def water_amount(self, w_amount):
-        if w_amount <= 0:
+        if int(w_amount) <= 0:
             raise ValueError("Water amount can't be <=0!")
         self._water_amount = w_amount

@@ -11,11 +11,13 @@ from ... import db
 app = Namespace('land', 'Lands endpoints (CRUD)')
 land_dto = app.model("new land", {
     'land_area': fields.Float(required=True, description='land area, should be positive number'),
-
+    'plant_id': fields.Integer(description='Plant id')
 })
 update_dto = app.model('update land', {
     'land_area': fields.Float(required=True, description='land area, should be positive number'),
-    'id': fields.Integer(required=True, description="land ID")
+    'id': fields.Integer(required=True, description="land ID"),
+    'plant_id': fields.Integer(description='Plant id')
+
 })
 del_dto = app.model('delete land', {
     'id': fields.Integer(required=True, description="land ID")
@@ -33,6 +35,9 @@ class AddLand(Resource):
             land_area = data.get('land_area')
             owner_id = user.id
             land = Land(land_area=land_area, owner_id=owner_id)
+            plant_id = data.get('plant_id') or None
+            if plant_id:
+                land.plant_id = plant_id
             db.session.add(land)
             db.session.commit()
             response_opj = {
