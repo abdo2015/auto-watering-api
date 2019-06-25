@@ -13,17 +13,21 @@ app = Namespace('user', 'add and update users endpoints')
 user_dto = app.model("user", {
     'email': fields.String(required=True, description='user email address'),
     'password': fields.String(required=True, description="user password"),
-    'username': fields.String(required=True, description="user name")
+    'first_name': fields.String(required=True, description="user first name"),
+    'last_name': fields.String(required=True, description="user last name"),
+    'phone': fields.String(required=True, description="user phone number")
 })
 
 schema = {
     'type': 'object',
     'properties': {
-        'username': {'type': 'string'},
+        'first_name': {'type': 'string'},
+        'last_name': {'type': 'string'},
+        'phone': {'type': 'string'},
         'email': {'type': 'string'},
         'password': {'type': 'string'}
     },
-    'required': ['email', 'password', 'username']
+    'required': ['email', 'password', 'first_name', 'last_name', 'phone']
 }
 
 
@@ -43,17 +47,20 @@ class SignUp(Resource):
                 }
                 return response_opj, 409
             password = data.get('password')
-            username = data.get('username')
+            username = data.get('first_name') + ' ' + data.get('last_name')
+            phone = data.get('phone')
             registered_on = datetime.datetime.utcnow()
             user = User(email=email, password=password,
-                        username=username, registered_on=registered_on)
+                        username=username, registered_on=registered_on, phone=phone)
             db.session.add(user)
             db.session.commit()
             login_user(user)
             response_opj = {
                 'status': 'success',
-                'message': 'User successfully signed up and logged in.'
+                'message': 'User successfully signed up and logged in.',
+                "username": user.username
             }
+
             return response_opj, 201
         except Exception as e:
             print(e)
@@ -88,7 +95,8 @@ class UpdateUser(Resource):
                 }
                 return response_opj, 409
             user.password = data.get('password')
-            user.username = data.get('username')
+            user.username = data.get('first_name') + ' ' + data.get('last_name')
+            user.phone = data.get('phone')
             db.session.add(user)
             db.session.commit()
             response_opj = {

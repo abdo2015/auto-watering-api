@@ -13,9 +13,11 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), unique=True, nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
     # public_id = db.Column(db.String(100), unique=True)
-    username = db.Column(db.String(50))
+    username = db.Column(db.String(50), nullable=False)
     password_hash = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(11), nullable=False)
     lands = db.relationship('Land', backref='user', lazy=False)
+    role = db.Column(db.String(10), default='user')  # can be user or admin
 
     @property
     def password(self):
@@ -33,5 +35,12 @@ class User(db.Model, UserMixin):
     def load_user(user_id):
         return User.query.filter_by(id=user_id).first()
 
+    @property
+    def isAdmin(self):
+        return True if self.role == 'admin' else False
+
     def __repr__(self):
-        return f"ID: {self.id}, user name: {self.username}, lands: {self.lands}"
+        if not self.isAdmin:
+            return f"ID: {self.id}, user name: {self.username}, lands: {self.lands}"
+
+        return f"ID: {self.id}, Admin name: {self.username}"

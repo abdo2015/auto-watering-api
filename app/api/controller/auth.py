@@ -21,7 +21,7 @@ schema = {
 @app.route('/login')
 @app.expect(user_auth)
 class Login(Resource):
-    @expects_json
+    @expects_json(schema)
     def post(self):
         try:
             data = request.json
@@ -37,7 +37,9 @@ class Login(Resource):
 
             response_opj = {
                 'status': 'success',
-                'message': 'Successfully logged in'
+                'message': 'Successfully logged in',
+                "username": user.username
+
             }
             login_user(user)
             return response_opj, 200

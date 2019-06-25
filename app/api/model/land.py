@@ -61,7 +61,7 @@ class Plant(db.Model, UserMixin):
     __tablename__ = "plant"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(50), nullable=False)
+    name = db.Column(db.String(50), nullable=False, unique=True)
     _water_amount = db.Column(db.Float, nullable=False)
     fertilizer = db.Column(db.String, nullable=False)
     lands = db.relationship('Land', backref='land', lazy=False)

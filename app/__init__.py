@@ -11,7 +11,7 @@ login_manager = LoginManager()
 
 
 def creat_app(config_name):
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='dashboard/base/static')
     app.config.from_object(config_by_name[config_name])
     db.init_app(app)
     login_manager.init_app(app)
