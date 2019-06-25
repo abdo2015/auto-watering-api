@@ -14,7 +14,7 @@ class User(db.Model, UserMixin):
     registered_on = db.Column(db.DateTime, nullable=False)
     # public_id = db.Column(db.String(100), unique=True)
     username = db.Column(db.String(50))
-    password_hash = db.Column(db.String(100))
+    password_hash = db.Column(db.String(100), nullable=False)
     lands = db.relationship('Land', backref='user', lazy=False)
 
     @property

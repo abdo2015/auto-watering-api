@@ -2,6 +2,7 @@ import datetime
 from flask import request, jsonify
 from flask_restplus import Namespace, Resource, fields
 from flask_login import login_user, login_required, current_user
+from flask_expects_json import expects_json
 
 from ..model.user import User
 from ..model.land import Land
@@ -15,10 +16,21 @@ user_dto = app.model("user", {
     'username': fields.String(required=True, description="user name")
 })
 
-# TODO validate request data
+schema = {
+    'type': 'object',
+    'properties': {
+        'username': {'type': 'string'},
+        'email': {'type': 'string'},
+        'password': {'type': 'string'}
+    },
+    'required': ['email', 'password', 'username']
+}
+
+
 @app.route('/singup')
 class SignUp(Resource):
     @app.expect(user_dto)
+    @expects_json(schema)
     def post(self):
         try:
             data = request.json
@@ -51,12 +63,12 @@ class SignUp(Resource):
             }
             return response_opj, 500
 
-# TODO validate request data
-# TODO make sure new mail not exist!
+
 @app.route('/update')
 class UpdateUser(Resource):
     @app.expect(user_dto)
     @login_required
+    @expects_json(schema)
     def put(self):
         try:
             data = request.json
@@ -68,6 +80,13 @@ class UpdateUser(Resource):
                 }
                 return response_opj, 500
             user.email = data.get('email')
+            user = User.query.filter_by(email=data.get('email')).first()
+            if user:
+                response_opj = {
+                    'status': 'faild',
+                    'message': f'Email : {data.get('email')} already exist'
+                }
+                return response_opj, 409
             user.password = data.get('password')
             user.username = data.get('username')
             db.session.add(user)

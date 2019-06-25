@@ -28,8 +28,8 @@ class Land(db.Model, UserMixin):
 
     @land_area.setter
     def land_area(self, area):
-        if int(area) < 0:
-            raise ValueError("area can't be >= 0 !!")
+        if int(area) <= 0:
+            raise ValueError("area can't be <= 0 !!")
         else:
             self.positive_area = area
 

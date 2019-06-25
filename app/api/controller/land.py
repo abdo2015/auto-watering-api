@@ -2,6 +2,7 @@ import datetime
 from flask import request
 from flask_restplus import Namespace, Resource, fields
 from flask_login import login_required, current_user
+from flask_expects_json import expects_json
 
 from ..model.user import User
 from ..model.land import Land
@@ -23,11 +24,39 @@ del_dto = app.model('delete land', {
     'id': fields.Integer(required=True, description="land ID")
 })
 
+post_schema = {
+    'type': 'object',
+    'properties': {
+        'land_area': {'type': 'number'},
+        'plant_id': {'type': 'integer'}
+    },
+    'required': ['land_area']
+}
+
+put_schema = {
+    'type': 'object',
+    'properties': {
+        'id': {'type': 'integer'},
+        'land_area': {'type': 'number'},
+        'plant_id': {'type': 'integer'}
+    },
+    'required': ['id', 'land_area']
+}
+
+del_schema = {
+    'type': 'object',
+    'properties': {
+        'id': {'type', 'integer'}
+    },
+    'required': ['id']
+}
+
 
 @app.route('/new')
 class AddLand(Resource):
     @login_required
     @app.expect(land_dto)
+    @expects_json(post_schema)
     def post(self):
         try:
             data = request.json
@@ -65,6 +94,7 @@ class AddLand(Resource):
 class Update(Resource):
     @login_required
     @app.expect(update_dto)
+    @expects_json(put_schema)
     def put(self):
         try:
             data = request.json
@@ -105,6 +135,7 @@ class Update(Resource):
 
 @app.route('/delete')
 class Delete(Resource):
+    @expects_json(del_schema)
     def delete(self):
         try:
             data = request.json
