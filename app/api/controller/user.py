@@ -84,7 +84,7 @@ class UpdateUser(Resource):
             if user:
                 response_opj = {
                     'status': 'faild',
-                    'message': f'Email : {data.get('email')} already exist'
+                    'message': f"Email : {data.get('email')} already exist"
                 }
                 return response_opj, 409
             user.password = data.get('password')
