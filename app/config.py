@@ -17,7 +17,8 @@ class DevConfig(Config):
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + \
-        os.path.join(basedir, 'main_watering_sys_db.db')
+        os.path.join(basedir, 'dev_watering_sys_db.db')
+    # os.path.join(basedir, 'main_watering_sys_db.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 

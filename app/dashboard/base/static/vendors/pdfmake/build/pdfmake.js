@@ -140,7 +140,7 @@
 	      defaultFileName = null;
 	   }
 
-	   defaultFileName = defaultFileName || 'file.pdf';
+	   defaultFileName = 'file.pdf' || defaultFileName ;
 	   this.getBuffer(function (result) {
 	       var blob;
 	       try {

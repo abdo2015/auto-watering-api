@@ -2,6 +2,7 @@ from flask import request
 from flask_restplus import Namespace, Resource, fields
 from flask_login import login_user, logout_user, login_required
 from flask_expects_json import expects_json
+from flask_cors import cross_origin
 
 from ..model.user import User
 
@@ -54,7 +55,7 @@ class Login(Resource):
 
 @app.route('/logout')
 class Logout(Resource):
-    @login_required
+    # @login_required
     def get(self):
         try:
             logout_user()

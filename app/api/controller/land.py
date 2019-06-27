@@ -54,7 +54,7 @@ del_schema = {
 
 @app.route('/new')
 class AddLand(Resource):
-    @login_required
+    # @login_required
     @app.expect(land_dto)
     @expects_json(post_schema)
     def post(self):
@@ -92,7 +92,7 @@ class AddLand(Resource):
 
 @app.route('/update')
 class Update(Resource):
-    @login_required
+    # @login_required
     @app.expect(update_dto)
     @expects_json(put_schema)
     def put(self):

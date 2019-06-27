@@ -61,7 +61,7 @@ class SignUp(Resource):
                 "username": user.username
             }
 
-            return response_opj, 201
+            return response_opj, 201  # , {'Access-Control-Allow-Origin': '*'}
         except Exception as e:
             print(e)
             response_opj = {
@@ -74,7 +74,7 @@ class SignUp(Resource):
 @app.route('/update')
 class UpdateUser(Resource):
     @app.expect(user_dto)
-    @login_required
+    # @login_required
     @expects_json(schema)
     def put(self):
         try:
@@ -115,7 +115,7 @@ class UpdateUser(Resource):
 
 @app.route('/lands')
 class UserLands(Resource):
-    @login_required
+    # @login_required
     def get(self):
         user_id = current_user.id
         lands = Land.query.filter_by(owner_id=user_id).all()
